@@ -1,57 +1,46 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    <v-navigation-drawer app permanent clipped mini-variant>
+      <v-list dense nav>
+        <v-list-item-group color="primary">
+          <v-list-item
+            v-for="item in items"
+            :key="item.title"
+            :to="{ path: item.path }"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-{{ item.icon }}</v-icon>
+            </v-list-item-icon>
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
 
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+    <v-app-bar app clipped-left dark color="primary">
+      <v-toolbar-title>Little Library</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
-      <HelloWorld />
+      <v-container fluid>
+        <router-view />
+      </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import { Component, Vue } from 'vue-property-decorator';
 
-export default Vue.extend({
-  name: 'App',
-
-  components: {
-    HelloWorld,
-  },
-
-  data: () => ({
-    //
-  }),
-});
+@Component({})
+export default class App extends Vue {
+  items = [
+    { title: 'Books', icon: 'book-multiple', path: '/books' },
+    { title: 'Cards', icon: 'credit-card', path: '/cards' },
+    { title: 'Settings', icon: 'cog', path: '/settings' },
+  ];
+}
 </script>
