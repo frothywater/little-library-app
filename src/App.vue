@@ -1,12 +1,13 @@
 <template>
   <v-app>
-    <v-navigation-drawer app permanent clipped mini-variant>
-      <v-list dense nav>
-        <v-list-item-group color="primary">
+    <v-navigation-drawer app permanent mini-variant dark color="primary">
+      <v-list height="100%" class="d-flex flex-column justify-center">
+        <v-list-item-group>
           <v-list-item
             v-for="item in items"
             :key="item.title"
             :to="{ path: item.path }"
+            class="my-8"
           >
             <v-list-item-icon>
               <v-icon>mdi-{{ item.icon }}</v-icon>
@@ -19,10 +20,6 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-
-    <v-app-bar app clipped-left color="primary" elevation="0">
-      <v-toolbar-title class="white--text">Little Library</v-toolbar-title>
-    </v-app-bar>
 
     <v-main>
       <v-container fluid>
