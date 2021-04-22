@@ -20,7 +20,7 @@
         <v-card-title>Add Book</v-card-title>
 
         <v-card-text>
-          <v-form @submit.prevent="saveNewBook" ref="newBookForm">
+          <v-form @submit.prevent="addBook" ref="addBookForm">
             <v-row>
               <v-col cols="12" class="pb-0">
                 <v-text-field
@@ -93,8 +93,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text @click="cancelNewBook">Cancel</v-btn>
-          <v-btn color="primary" text type="submit" @click="saveNewBook"
+          <v-btn text @click="cancelAddBook">Cancel</v-btn>
+          <v-btn color="primary" text type="submit" @click="addBook"
             >Save</v-btn
           >
         </v-card-actions>
@@ -106,7 +106,7 @@
         <v-card-title>Search</v-card-title>
 
         <v-card-text>
-          <v-form @submit.prevent="saveNewBook" ref="filterForm">
+          <v-form @submit.prevent="addBook" ref="filterForm">
             <v-row>
               <v-col cols="12" class="pb-0">
                 <v-text-field
@@ -254,17 +254,17 @@ export default class Books extends Vue {
     nonNegative: (value) => !value || value >= 0 || 'Should be no less than 0.',
   };
 
-  saveNewBook(): void {
+  addBook(): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((this.$refs.newBookForm as any).validate()) {
+    if ((this.$refs.addBookForm as any).validate()) {
       this.showAddBookDialog = false;
     }
   }
 
-  cancelNewBook(): void {
+  cancelAddBook(): void {
     Object.assign(this.draftBook, Books.emptyBook);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.$refs.newBookForm as any).resetValidation();
+    (this.$refs.addBookForm as any).resetValidation();
     this.showAddBookDialog = false;
   }
 
