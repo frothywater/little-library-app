@@ -2,6 +2,11 @@
   <v-container>
     <v-toolbar flat>
       <v-toolbar-title>Books</v-toolbar-title>
+      <v-spacer />
+      <v-btn text color="secondary">
+        <v-icon size="18" class="mr-2">mdi-filter</v-icon>
+        Filter
+      </v-btn>
     </v-toolbar>
 
     <book-table :books="books" />
@@ -101,6 +106,7 @@
         color="secondary"
         dark
         fab
+        absolute
         class="fab-button"
         @click="dialog = !dialog"
       >
