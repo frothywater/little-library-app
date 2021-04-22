@@ -1,8 +1,12 @@
 <template>
   <v-data-table
+    :value="selected"
+    @input="$emit('input', $event.value)"
     :headers="headers"
     :items="cards"
     item-key="id"
+    single-select
+    show-select
     disable-pagination
     disable-sort
     hide-default-footer
@@ -17,6 +21,7 @@ import { DataTableHeader } from 'vuetify';
 @Component
 export default class CardTable extends Vue {
   @Prop() readonly cards!: CardRow[];
+  @Prop() selected!: string[];
 
   headers: DataTableHeader[] = [
     { text: 'ID', value: 'id' },

@@ -1,19 +1,19 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="5">
+      <v-col cols="6">
         <v-toolbar flat>
           <v-toolbar-title>Cards</v-toolbar-title>
         </v-toolbar>
 
-        <card-table :cards="cards" />
+        <card-table :cards="cards" v-model="selectedCards" />
 
-        <v-dialog v-model="showDialog" max-width="500">
+        <v-dialog v-model="showAddCardDialog" max-width="500">
           <v-card>
             <v-card-title>Add Card</v-card-title>
 
             <v-card-text>
-              <v-form @submit.prevent="addCard" ref="form">
+              <v-form @submit.prevent="addCard" ref="addCardForm">
                 <v-row>
                   <v-col cols="8" class="pb-0">
                     <v-text-field
@@ -45,7 +45,7 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="cancel">Cancel</v-btn>
+              <v-btn text @click="cancelAddCard">Cancel</v-btn>
               <v-btn color="primary" text type="submit" @click="addCard"
                 >Save</v-btn
               >
@@ -59,8 +59,8 @@
             dark
             fab
             absolute
-            class="fab-button-middle"
-            @click="showDialog = !showDialog"
+            class="fab-button-left"
+            @click="showAddCardDialog = !showAddCardDialog"
           >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
@@ -69,12 +69,52 @@
 
       <v-divider vertical class="divider" />
 
-      <v-col cols="7">
+      <v-col cols="6">
         <v-toolbar flat>
           <v-toolbar-title>Borrowed</v-toolbar-title>
         </v-toolbar>
 
         <book-table :books="books" />
+
+        <p>{{ selectedCards }}</p>
+
+        <v-dialog v-model="showBorrowDialog" max-width="500">
+          <v-card>
+            <v-card-title>Add Card</v-card-title>
+
+            <v-card-text>
+              <v-form @submit.prevent="borrow" ref="borrowForm">
+                <v-text-field
+                  v-model="draftCard.name"
+                  label="Name"
+                  :rules="[rules.required]"
+                  maxlength="255"
+                />
+              </v-form>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text @click="cancelBorrow">Cancel</v-btn>
+              <v-btn color="primary" text type="submit" @click="borrow"
+                >Save</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <v-fab-transition>
+          <v-btn
+            color="indigo"
+            dark
+            fab
+            absolute
+            class="fab-button"
+            @click="showBorrowDialog = !showBorrowDialog"
+          >
+            <v-icon>mdi-book</v-icon>
+          </v-btn>
+        </v-fab-transition>
       </v-col>
     </v-row>
   </v-container>
@@ -96,7 +136,10 @@ import { InputValidationRule } from 'vuetify';
   components: { CardTable, BookTable },
 })
 export default class Cards extends Vue {
-  showDialog = false;
+  showAddCardDialog = false;
+  showBorrowDialog = false;
+
+  selectedCards: string[] = [];
 
   cards: CardRow[] = [
     {
@@ -136,25 +179,38 @@ export default class Cards extends Vue {
 
   addCard(): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((this.$refs.form as any).validate()) {
-      this.showDialog = false;
+    if ((this.$refs.addCardForm as any).validate()) {
+      this.showAddCardDialog = false;
     }
   }
 
-  cancel(): void {
-    this.draftCard = Cards.emptyCard;
+  cancelAddCard(): void {
+    Object.assign(this.draftCard, Cards.emptyCard);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.$refs.form as any).resetValidation();
-    this.showDialog = false;
+    (this.$refs.addCardForm as any).resetValidation();
+    this.showAddCardDialog = false;
+  }
+
+  borrow(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((this.$refs.borrowForm as any).validate()) {
+      this.showBorrowDialog = false;
+    }
+  }
+
+  cancelBorrow(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (this.$refs.borrowForm as any).resetValidation();
+    this.showBorrowDialog = false;
   }
 }
 </script>
 
 <style scoped>
-.fab-button-middle {
+.fab-button-left {
   position: fixed;
   bottom: 36px;
-  right: calc(100% * 7 / 12);
+  right: calc(100% / 2);
 }
 
 .divider {
