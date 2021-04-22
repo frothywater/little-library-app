@@ -6,6 +6,7 @@
     :loading="loading"
     loading-text="Loading data..."
     disable-pagination
+    disable-sort
     hide-default-footer
   />
 </template>

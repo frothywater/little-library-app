@@ -4,6 +4,7 @@
     :items="cards"
     item-key="id"
     disable-pagination
+    disable-sort
     hide-default-footer
   />
 </template>
