@@ -3,6 +3,8 @@
     :headers="headers"
     :items="books"
     item-key="id"
+    :loading="loading"
+    loading-text="Loading data..."
     disable-pagination
     hide-default-footer
   />
@@ -16,6 +18,7 @@ import { DataTableHeader } from 'vuetify';
 @Component
 export default class BookTable extends Vue {
   @Prop() readonly books!: BookRow[];
+  @Prop() loading = false;
 
   headers: DataTableHeader[] = [
     { text: 'ID', value: 'id' },

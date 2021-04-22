@@ -13,7 +13,7 @@
       </v-btn>
     </v-toolbar>
 
-    <book-table :books="books" />
+    <book-table :books="books" :loading="loading" />
 
     <v-dialog v-model="showAddBookDialog" max-width="500">
       <v-card>
@@ -219,6 +219,7 @@ import { InputValidationRule } from 'vuetify';
 export default class Books extends Vue {
   showAddBookDialog = false;
   showFilterDialog = false;
+  loading = false;
 
   books: BookRow[] = [
     {
