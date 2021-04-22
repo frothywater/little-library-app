@@ -20,8 +20,8 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app clipped-left dark color="primary">
-      <v-toolbar-title>Little Library</v-toolbar-title>
+    <v-app-bar app clipped-left color="primary" elevation="0">
+      <v-toolbar-title class="white--text">Little Library</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
