@@ -3,11 +3,7 @@
     <v-toolbar flat>
       <v-toolbar-title>Books</v-toolbar-title>
       <v-spacer />
-      <v-btn
-        text
-        color="secondary"
-        @click="showFilterDialog = !showFilterDialog"
-      >
+      <v-btn text color="secondary" @click="showFilterDialog = !showFilterDialog">
         <v-icon size="18" class="mr-2">mdi-filter</v-icon>
         Filter
       </v-btn>
@@ -23,69 +19,29 @@
           <v-form @submit.prevent="addBook" ref="addBookForm">
             <v-row>
               <v-col cols="12" class="pb-0">
-                <v-text-field
-                  v-model="draftBook.title"
-                  label="Title"
-                  :rules="[rules.required]"
-                  maxlength="255"
-                />
+                <v-text-field v-model="draftBook.title" label="Title" :rules="[rules.required]" maxlength="255" />
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="4" class="py-0">
-                <v-text-field
-                  v-model="draftBook.author"
-                  label="Author"
-                  :rules="[rules.required]"
-                  maxlength="255"
-                />
+                <v-text-field v-model="draftBook.author" label="Author" :rules="[rules.required]" maxlength="255" />
               </v-col>
               <v-col cols="4" class="py-0">
-                <v-text-field
-                  v-model="draftBook.press"
-                  label="Press"
-                  :rules="[rules.required]"
-                  maxlength="255"
-                />
+                <v-text-field v-model="draftBook.press" label="Press" :rules="[rules.required]" maxlength="255" />
               </v-col>
               <v-col cols="4" class="py-0">
-                <v-text-field
-                  v-model="draftBook.category"
-                  label="Category"
-                  :rules="[rules.required]"
-                  maxlength="255"
-                />
+                <v-text-field v-model="draftBook.category" label="Category" :rules="[rules.required]" maxlength="255" />
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="4" class="py-0">
-                <v-text-field
-                  v-model="draftBook.year"
-                  label="Year"
-                  type="number"
-                  min="0"
-                  :rules="[rules.required, rules.nonNegative]"
-                />
+                <v-text-field v-model="draftBook.year" label="Year" type="number" min="0" :rules="[rules.required, rules.nonNegative]" />
               </v-col>
               <v-col cols="4" class="py-0">
-                <v-text-field
-                  v-model="draftBook.price"
-                  label="Price"
-                  type="number"
-                  step="0.10"
-                  min="0"
-                  :rules="[rules.required, rules.nonNegative]"
-                  prefix="$"
-                />
+                <v-text-field v-model="draftBook.price" label="Price" type="number" step="0.10" min="0" :rules="[rules.required, rules.nonNegative]" prefix="$" />
               </v-col>
               <v-col cols="4" class="py-0">
-                <v-text-field
-                  v-model="draftBook.count"
-                  label="Count"
-                  type="number"
-                  min="0"
-                  :rules="[rules.required, rules.nonNegative]"
-                />
+                <v-text-field v-model="draftBook.count" label="Count" type="number" min="0" :rules="[rules.required, rules.nonNegative]" />
               </v-col>
             </v-row>
           </v-form>
@@ -94,9 +50,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text @click="cancelAddBook">Cancel</v-btn>
-          <v-btn color="primary" text type="submit" @click="addBook"
-            >Save</v-btn
-          >
+          <v-btn color="primary" text type="submit" @click="addBook">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -109,74 +63,32 @@
           <v-form @submit.prevent="addBook" ref="filterForm">
             <v-row>
               <v-col cols="12" class="pb-0">
-                <v-text-field
-                  v-model="draftFilterParams.title"
-                  label="Title"
-                  maxlength="255"
-                />
+                <v-text-field v-model="draftFilterParams.title" label="Title" maxlength="255" />
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="4" class="py-0">
-                <v-text-field
-                  v-model="draftFilterParams.author"
-                  label="Author"
-                  maxlength="255"
-                />
+                <v-text-field v-model="draftFilterParams.author" label="Author" maxlength="255" />
               </v-col>
               <v-col cols="4" class="py-0">
-                <v-text-field
-                  v-model="draftFilterParams.press"
-                  label="Press"
-                  maxlength="255"
-                />
+                <v-text-field v-model="draftFilterParams.press" label="Press" maxlength="255" />
               </v-col>
               <v-col cols="4" class="py-0">
-                <v-text-field
-                  v-model="draftFilterParams.category"
-                  label="Category"
-                  maxlength="255"
-                />
+                <v-text-field v-model="draftFilterParams.category" label="Category" maxlength="255" />
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="3" class="py-0">
-                <v-text-field
-                  v-model="draftFilterParams.minYear"
-                  label="Min Year"
-                  type="number"
-                  min="0"
-                  :rules="[rules.nonNegative]"
-                />
+                <v-text-field v-model="draftFilterParams.minYear" label="Min Year" type="number" min="0" :rules="[rules.nonNegative]" />
               </v-col>
               <v-col cols="3" class="py-0">
-                <v-text-field
-                  v-model="draftFilterParams.maxYear"
-                  label="Max Year"
-                  type="number"
-                  min="0"
-                  :rules="[rules.nonNegative]"
-                />
+                <v-text-field v-model="draftFilterParams.maxYear" label="Max Year" type="number" min="0" :rules="[rules.nonNegative]" />
               </v-col>
               <v-col cols="3" class="py-0">
-                <v-text-field
-                  v-model="draftFilterParams.minPrice"
-                  label="Min Price"
-                  type="number"
-                  min="0"
-                  step="0.1"
-                  :rules="[rules.nonNegative]"
-                />
+                <v-text-field v-model="draftFilterParams.minPrice" label="Min Price" type="number" min="0" step="0.1" :rules="[rules.nonNegative]" />
               </v-col>
               <v-col cols="3" class="py-0">
-                <v-text-field
-                  v-model="draftFilterParams.maxPrice"
-                  label="Max Price"
-                  type="number"
-                  min="0"
-                  step="0.1"
-                  :rules="[rules.nonNegative]"
-                />
+                <v-text-field v-model="draftFilterParams.maxPrice" label="Max Price" type="number" min="0" step="0.1" :rules="[rules.nonNegative]" />
               </v-col>
             </v-row>
           </v-form>
@@ -185,22 +97,13 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn text @click="cancelFilter">Cancel</v-btn>
-          <v-btn color="primary" text type="submit" @click="applyFilter"
-            >Apply</v-btn
-          >
+          <v-btn color="primary" text type="submit" @click="applyFilter">Apply</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <v-fab-transition>
-      <v-btn
-        color="secondary"
-        dark
-        fab
-        absolute
-        class="fab-button"
-        @click="showAddBookDialog = !showAddBookDialog"
-      >
+      <v-btn color="secondary" dark fab absolute class="fab-button" @click="showAddBookDialog = !showAddBookDialog">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-fab-transition>
@@ -208,10 +111,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import BookTable from '@/components/BookTable.vue';
-import { BookRow, BookInfo, BookSearchParams } from 'little-library/src/typing';
-import { InputValidationRule } from 'vuetify';
+import { Component, Vue } from "vue-property-decorator";
+import BookTable from "@/components/BookTable.vue";
+import { BookRow, BookInfo, BookSearchParams } from "little-library/src/typing";
+import { InputValidationRule } from "vuetify";
 
 @Component({
   components: { BookTable },
@@ -224,10 +127,10 @@ export default class Books extends Vue {
   books: BookRow[] = [
     {
       id: 1,
-      title: 'Hello',
-      author: 'Alice',
-      press: 'Penguin',
-      category: 'Fiction',
+      title: "Hello",
+      author: "Alice",
+      press: "Penguin",
+      category: "Fiction",
       year: 2016,
       price: 10.0,
       total: 10,
@@ -238,10 +141,10 @@ export default class Books extends Vue {
   draftBook: BookInfo = Books.emptyBook;
 
   static readonly emptyBook: BookInfo = {
-    title: '',
-    author: '',
-    press: '',
-    category: '',
+    title: "",
+    author: "",
+    press: "",
+    category: "",
     year: new Date().getFullYear(),
     price: 10.0,
     count: 10,
@@ -250,8 +153,8 @@ export default class Books extends Vue {
   draftFilterParams: BookFilterParams = {};
 
   rules: { [key: string]: InputValidationRule } = {
-    required: (value) => !!value || 'Required.',
-    nonNegative: (value) => !value || value >= 0 || 'Should be no less than 0.',
+    required: (value) => !!value || "Required.",
+    nonNegative: (value) => !value || value >= 0 || "Should be no less than 0.",
   };
 
   addBook(): void {
