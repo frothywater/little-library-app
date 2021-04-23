@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :value="selected" @input="$emit('input', $event)" :headers="headers" :items="cards" item-key="id" single-select show-select disable-pagination disable-sort hide-default-footer />
+  <v-data-table :value="value" @input="$emit('input', $event)" :headers="headers" :items="cards" item-key="id" single-select show-select disable-pagination disable-sort hide-default-footer />
 </template>
 
 <script lang="ts">
@@ -10,7 +10,7 @@ import { DataTableHeader } from "vuetify";
 @Component
 export default class CardTable extends Vue {
   @Prop() readonly cards!: CardRow[];
-  @Prop() selected!: CardRow[];
+  @Prop() value!: CardRow[];
 
   headers: DataTableHeader[] = [
     { text: "ID", value: "id" },
