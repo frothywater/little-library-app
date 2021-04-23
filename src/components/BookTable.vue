@@ -1,6 +1,6 @@
 <template>
   <v-data-table :headers="headers" :items="books" item-key="id" :loading="loading" loading-text="Loading data..." disable-pagination disable-sort hide-default-footer>
-    <template v-if="withAction" slot="item.actions">
+    <template v-if="withAction" #item.actions>
       <v-btn icon>
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
