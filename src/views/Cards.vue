@@ -41,11 +41,9 @@
           </v-card>
         </v-dialog>
 
-        <v-fab-transition>
-          <v-btn color="secondary" dark fab absolute class="fab-button-left" @click="showAddCardDialog = !showAddCardDialog">
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </v-fab-transition>
+        <v-btn color="secondary" dark fab absolute class="fab-button-left" @click="showAddCardDialog = !showAddCardDialog">
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
       </v-col>
 
       <v-divider vertical class="divider" />
@@ -55,31 +53,36 @@
           <v-toolbar-title>Borrowed</v-toolbar-title>
         </v-toolbar>
 
-        <book-table :books="books" />
+        <template v-if="!!selectedCardID">
+          <book-table :books="books" />
 
-        <v-dialog v-model="showBorrowDialog" max-width="500">
-          <v-card>
-            <v-card-title>Add Card</v-card-title>
+          <v-dialog v-model="showBorrowDialog" max-width="300">
+            <v-card>
+              <v-card-title>Borrow Book</v-card-title>
 
-            <v-card-text>
-              <v-form @submit.prevent="borrow" ref="borrowForm">
-                <v-text-field v-model="draftCard.name" label="Name" :rules="[rules.required]" maxlength="255" />
-              </v-form>
-            </v-card-text>
+              <v-card-text>
+                <v-form @submit.prevent="borrow" ref="borrowForm">
+                  <v-text-field v-model="borrowingBookID" label="Book ID" type="number" min="1" :rules="[rules.required, rules.nonNegative]" />
+                </v-form>
+              </v-card-text>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text @click="cancelBorrow">Cancel</v-btn>
-              <v-btn color="primary" text type="submit" @click="borrow">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text @click="cancelBorrow">Cancel</v-btn>
+                <v-btn color="primary" text type="submit" @click="borrow">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
 
-        <v-fab-transition>
           <v-btn color="indigo" dark fab absolute class="fab-button" @click="showBorrowDialog = !showBorrowDialog">
             <v-icon>mdi-book</v-icon>
           </v-btn>
-        </v-fab-transition>
+        </template>
+        <template v-else>
+          <v-container>
+            <p class="text--secondary text-center">Choose a card</p>
+          </v-container>
+        </template>
       </v-col>
     </v-row>
   </v-container>
@@ -138,6 +141,8 @@ export default class Cards extends Vue {
     type: CardType.student,
   };
 
+  borrowingBookID = 1;
+
   rules: { [key: string]: InputValidationRule } = {
     required: (value) => !!value || "Required.",
     nonNegative: (value) => !value || value >= 0 || "Should be no less than 0.",
@@ -169,6 +174,7 @@ export default class Cards extends Vue {
   }
 
   cancelBorrow(): void {
+    this.borrowingBookID = 1;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (this.$refs.borrowForm as any).resetValidation();
     this.showBorrowDialog = false;
