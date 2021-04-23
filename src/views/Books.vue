@@ -11,49 +11,7 @@
 
     <book-table :books="books" :loading="loading" />
 
-    <v-dialog v-model="showAddBookDialog" max-width="500">
-      <v-card>
-        <v-card-title>Add Book</v-card-title>
-
-        <v-card-text>
-          <v-form @submit.prevent="addBook" ref="addBookForm">
-            <v-row>
-              <v-col cols="12" class="pb-0">
-                <v-text-field v-model="draftBook.title" label="Title" :rules="[rules.required]" maxlength="255" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="4" class="py-0">
-                <v-text-field v-model="draftBook.author" label="Author" :rules="[rules.required]" maxlength="255" />
-              </v-col>
-              <v-col cols="4" class="py-0">
-                <v-text-field v-model="draftBook.press" label="Press" :rules="[rules.required]" maxlength="255" />
-              </v-col>
-              <v-col cols="4" class="py-0">
-                <v-text-field v-model="draftBook.category" label="Category" :rules="[rules.required]" maxlength="255" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="4" class="py-0">
-                <v-text-field v-model="draftBook.year" label="Year" type="number" min="0" :rules="[rules.required, rules.nonNegative]" />
-              </v-col>
-              <v-col cols="4" class="py-0">
-                <v-text-field v-model="draftBook.price" label="Price" type="number" step="0.10" min="0" :rules="[rules.required, rules.nonNegative]" prefix="$" />
-              </v-col>
-              <v-col cols="4" class="py-0">
-                <v-text-field v-model="draftBook.count" label="Count" type="number" min="0" :rules="[rules.required, rules.nonNegative]" />
-              </v-col>
-            </v-row>
-          </v-form>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text @click="cancelAddBook">Cancel</v-btn>
-          <v-btn color="primary" text type="submit" @click="addBook">Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <add-book-form v-model="showAddBookDialog" @submit="addBook" />
 
     <v-dialog v-model="showFilterDialog" max-width="500">
       <v-card>
@@ -113,11 +71,12 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import BookTable from "@/components/BookTable.vue";
-import { BookRow, BookInfo, BookSearchParams } from "little-library/src/typing";
+import AddBookForm from "@/components/AddBookForm.vue";
+import { BookRow, BookInfo } from "little-library/src/typing";
 import { InputValidationRule } from "vuetify";
 
 @Component({
-  components: { BookTable },
+  components: { BookTable, AddBookForm },
 })
 export default class Books extends Vue {
   showAddBookDialog = false;
@@ -138,18 +97,6 @@ export default class Books extends Vue {
     },
   ];
 
-  draftBook: BookInfo = Books.emptyBook;
-
-  static readonly emptyBook: BookInfo = {
-    title: "",
-    author: "",
-    press: "",
-    category: "",
-    year: new Date().getFullYear(),
-    price: 10.0,
-    count: 10,
-  };
-
   draftFilterParams: BookFilterParams = {};
 
   rules: { [key: string]: InputValidationRule } = {
@@ -157,18 +104,8 @@ export default class Books extends Vue {
     nonNegative: (value) => !value || value >= 0 || "Should be no less than 0.",
   };
 
-  addBook(): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((this.$refs.addBookForm as any).validate()) {
-      this.showAddBookDialog = false;
-    }
-  }
-
-  cancelAddBook(): void {
-    Object.assign(this.draftBook, Books.emptyBook);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.$refs.addBookForm as any).resetValidation();
-    this.showAddBookDialog = false;
+  addBook(info: BookInfo): void {
+    console.log(info);
   }
 
   applyFilter(): void {
