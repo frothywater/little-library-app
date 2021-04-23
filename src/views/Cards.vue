@@ -8,38 +8,7 @@
 
         <card-table :cards="cards" v-model="selectedCards" />
 
-        <v-dialog v-model="showAddCardDialog" max-width="500">
-          <v-card>
-            <v-card-title>Add Card</v-card-title>
-
-            <v-card-text>
-              <v-form @submit.prevent="addCard" ref="addCardForm">
-                <v-row>
-                  <v-col cols="8" class="pb-0">
-                    <v-text-field v-model="draftCard.name" label="Name" :rules="[rules.required]" maxlength="255" />
-                  </v-col>
-                  <v-col cols="4" class="py-0">
-                    <v-radio-group v-model="draftCard.type" mandatory dense>
-                      <v-radio label="Student" value="student"></v-radio>
-                      <v-radio label="Teacher" value="teacher"></v-radio>
-                    </v-radio-group>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="12" class="py-0">
-                    <v-text-field v-model="draftCard.address" label="Address" :rules="[rules.required]" maxlength="255" />
-                  </v-col>
-                </v-row>
-              </v-form>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text @click="cancelAddCard">Cancel</v-btn>
-              <v-btn color="primary" text type="submit" @click="addCard">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+        <add-card-form v-model="showAddCardDialog" @submit="addCard($event)" />
 
         <v-btn color="secondary" dark fab absolute class="fab-button-left" @click="showAddCardDialog = !showAddCardDialog">
           <v-icon>mdi-plus</v-icon>
@@ -92,11 +61,11 @@
 import { Component, Vue } from "vue-property-decorator";
 import CardTable from "@/components/CardTable.vue";
 import BookTable from "@/components/BookTable.vue";
+import AddCardForm from "@/components/AddCardForm.vue";
 import { BookRow, CardRow, CardType, CardInfo } from "little-library/src/typing";
-import { InputValidationRule } from "vuetify";
 
 @Component({
-  components: { CardTable, BookTable },
+  components: { CardTable, BookTable, AddCardForm },
 })
 export default class Cards extends Vue {
   showAddCardDialog = false;
@@ -133,37 +102,14 @@ export default class Cards extends Vue {
     },
   ];
 
-  draftCard = Cards.emptyCard;
-
-  static readonly emptyCard: CardInfo = {
-    name: "",
-    address: "",
-    type: CardType.student,
-  };
-
   borrowingBookID = 1;
-
-  rules: { [key: string]: InputValidationRule } = {
-    required: (value) => !!value || "Required.",
-    nonNegative: (value) => !value || value >= 0 || "Should be no less than 0.",
-  };
 
   get selectedCardID(): number | undefined {
     return this.selectedCards[0]?.id;
   }
 
-  addCard(): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((this.$refs.addCardForm as any).validate()) {
-      this.showAddCardDialog = false;
-    }
-  }
-
-  cancelAddCard(): void {
-    Object.assign(this.draftCard, Cards.emptyCard);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.$refs.addCardForm as any).resetValidation();
-    this.showAddCardDialog = false;
+  addCard(info: CardInfo): void {
+    console.log(info);
   }
 
   borrow(): void {
