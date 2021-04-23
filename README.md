@@ -1,24 +1,10 @@
 # little-library-app
 
-## Project setup
-```
-npm install
-```
+A little library management system based on MySQL.
+This repo provides a cross-platform App interface.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Declaration: This project as a coursework of _Database Manage System_ fully belongs to @frothywater.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Usage
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Working in progress...
