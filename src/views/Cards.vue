@@ -54,7 +54,7 @@
         </v-toolbar>
 
         <template v-if="!!selectedCardID">
-          <book-table :books="books" />
+          <book-table :books="books" with-action />
 
           <v-dialog v-model="showBorrowDialog" max-width="300">
             <v-card>
