@@ -25,23 +25,7 @@
         <template v-if="!!selectedCardID">
           <book-table :books="books" with-action />
 
-          <v-dialog v-model="showBorrowDialog" max-width="300">
-            <v-card>
-              <v-card-title>Borrow Book</v-card-title>
-
-              <v-card-text>
-                <v-form @submit.prevent="borrow" ref="borrowForm">
-                  <v-text-field v-model="borrowingBookID" label="Book ID" type="number" min="1" :rules="[rules.required, rules.nonNegative]" />
-                </v-form>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text @click="cancelBorrow">Cancel</v-btn>
-                <v-btn color="primary" text type="submit" @click="borrow">Save</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <borrow-form v-model="showBorrowDialog" @submit="borrow($event)" />
 
           <v-btn color="indigo" dark fab absolute class="fab-button" @click="showBorrowDialog = !showBorrowDialog">
             <v-icon>mdi-book</v-icon>
@@ -62,10 +46,11 @@ import { Component, Vue } from "vue-property-decorator";
 import CardTable from "@/components/CardTable.vue";
 import BookTable from "@/components/BookTable.vue";
 import AddCardForm from "@/components/AddCardForm.vue";
+import BorrowForm from "@/components/BorrowForm.vue";
 import { BookRow, CardRow, CardType, CardInfo } from "little-library/src/typing";
 
 @Component({
-  components: { CardTable, BookTable, AddCardForm },
+  components: { CardTable, BookTable, AddCardForm, BorrowForm },
 })
 export default class Cards extends Vue {
   showAddCardDialog = false;
@@ -102,8 +87,6 @@ export default class Cards extends Vue {
     },
   ];
 
-  borrowingBookID = 1;
-
   get selectedCardID(): number | undefined {
     return this.selectedCards[0]?.id;
   }
@@ -112,18 +95,8 @@ export default class Cards extends Vue {
     console.log(info);
   }
 
-  borrow(): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((this.$refs.borrowForm as any).validate()) {
-      this.showBorrowDialog = false;
-    }
-  }
-
-  cancelBorrow(): void {
-    this.borrowingBookID = 1;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.$refs.borrowForm as any).resetValidation();
-    this.showBorrowDialog = false;
+  borrow(id: number): void {
+    console.log(id);
   }
 }
 </script>
