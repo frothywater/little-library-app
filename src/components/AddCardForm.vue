@@ -4,7 +4,7 @@
       <v-card-title>Add Card</v-card-title>
 
       <v-card-text>
-        <v-form @submit.prevent="sumbit" ref="form">
+        <v-form @submit.prevent="submit" ref="form">
           <v-row>
             <v-col cols="8" class="pb-0">
               <v-text-field v-model="draftCard.name" label="Name" :rules="[rules.required]" maxlength="255" />
@@ -27,7 +27,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="cancel">Cancel</v-btn>
-        <v-btn color="primary" text type="submit" @click="sumbit">Save</v-btn>
+        <v-btn color="primary" text type="submit" @click="submit">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -54,7 +54,7 @@ export default class AddCardForm extends Vue {
     return rules;
   }
 
-  sumbit(): void {
+  submit(): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((this.$refs.form as any).validate()) {
       this.$emit("submit", this.draftCard);
