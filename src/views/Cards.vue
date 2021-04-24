@@ -28,7 +28,7 @@
           <borrow-form v-model="showBorrowDialog" @submit="borrow($event)" />
 
           <v-btn color="indigo" dark fab absolute class="fab-button" @click="showBorrowDialog = !showBorrowDialog">
-            <v-icon>mdi-book</v-icon>
+            <v-icon>mdi-book-arrow-left</v-icon>
           </v-btn>
         </template>
         <template v-else>
