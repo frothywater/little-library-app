@@ -23,7 +23,7 @@ export default class Snackbar extends Vue {
   get iconName(): string {
     switch (this.type) {
       case SnackbarType.error:
-        return "alert";
+        return "close-octagon";
       case SnackbarType.success:
         return "check-circle";
       case SnackbarType.info:
