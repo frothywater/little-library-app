@@ -1,6 +1,7 @@
+import auth from "@/store/auth";
+import Books from "@/views/Books.vue";
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Books from "../views/Books.vue";
 
 Vue.use(VueRouter);
 
@@ -38,6 +39,22 @@ const routes: Array<RouteConfig> = [
 
 const router = new VueRouter({
   routes,
+});
+
+router.beforeEach((to, _from, next) => {
+  if (to.path === "/adminLogin") {
+    if (!auth.managerLoggedIn) next();
+    else next("/managerLogin");
+  } else if (to.path === "/managerLogin") {
+    if (!auth.adminLoggedIn) next("/adminLogin");
+    else if (!auth.managerLoggedIn) next();
+    else next("/");
+  } else {
+    if (auth.adminLoggedIn) {
+      if (auth.managerLoggedIn) next();
+      else next("/managerLogin");
+    } else next("/adminLogin");
+  }
 });
 
 export default router;

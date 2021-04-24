@@ -1,5 +1,5 @@
 <template>
-  <form-dialog title="Login via manager" :width="360" persistent :loading="loading" v-model="show" :initial="initialValue" #default="{ draft, update }">
+  <form-dialog title="Login via manager" :width="360" persistent :loading="loading" v-model="show" :initial="initialValue" #default="{ draft, update }" @submit="login">
     <v-text-field :value="draft.username" @input="update($event, 'username')" label="User Name" type="username" :rules="[rules.required]" />
     <v-text-field :value="draft.password" @input="update($event, 'password')" label="Password" type="password" :rules="[rules.required]" />
   </form-dialog>
@@ -10,6 +10,7 @@ import { Component, Vue } from "vue-property-decorator";
 import FormDialog from "@/components/FormDialog.vue";
 import { ManagerLoginInfo } from "@/utilities/typing";
 import { rules, ValidationRules } from "@/utilities/validation";
+import auth from "@/store/auth";
 
 @Component({ components: { FormDialog } })
 export default class ManagerLogin extends Vue {
@@ -23,6 +24,12 @@ export default class ManagerLogin extends Vue {
 
   get rules(): ValidationRules {
     return rules;
+  }
+
+  login() {
+    console.log("Manager logged in.");
+    auth.managerLogin();
+    this.$router.push("/");
   }
 }
 </script>
