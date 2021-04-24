@@ -1,28 +1,28 @@
-import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
-import Books from '../views/Books.vue';
+import Vue from "vue";
+import VueRouter, { RouteConfig } from "vue-router";
+import Books from "../views/Books.vue";
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
-    path: '/',
-    redirect: '/books',
+    path: "/",
+    redirect: "/books",
   },
   {
-    path: '/books',
-    name: 'Books',
+    path: "/books",
+    name: "Books",
     component: Books,
   },
   {
-    path: '/cards',
-    name: 'Cards',
-    component: () => import('../views/Cards.vue'),
+    path: "/cards",
+    name: "Cards",
+    component: () => import("../views/Cards.vue"),
   },
   {
-    path: '/settings',
-    name: 'Settings',
-    component: () => import('../views/Settings.vue'),
+    path: "/settings",
+    name: "Settings",
+    component: () => import("../views/Settings.vue"),
   },
 ];
 
