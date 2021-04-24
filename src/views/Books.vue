@@ -60,11 +60,11 @@
       </v-card>
     </v-dialog>
 
-    <v-fab-transition>
-      <v-btn color="secondary" dark fab absolute class="fab-button" @click="showAddBookDialog = !showAddBookDialog">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
-    </v-fab-transition>
+    <v-btn color="secondary" dark fab absolute class="fab-button" @click="showAddBookDialog = !showAddBookDialog">
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
+
+    <snackbar v-model="showSnackbar" :text="message" :type="snackbarType" />
   </v-container>
 </template>
 
@@ -72,16 +72,21 @@
 import { Component, Vue } from "vue-property-decorator";
 import BookTable from "@/components/BookTable.vue";
 import AddBookForm from "@/components/AddBookForm.vue";
+import Snackbar from "@/components/Snackbar.vue";
 import { BookRow, BookInfo } from "little-library/src/typing";
 import { InputValidationRule } from "vuetify";
+import { SnackbarType } from "@/utilities/typing";
 
 @Component({
-  components: { BookTable, AddBookForm },
+  components: { BookTable, AddBookForm, Snackbar },
 })
 export default class Books extends Vue {
   showAddBookDialog = false;
   showFilterDialog = false;
   loading = false;
+  showSnackbar = false;
+  message = "";
+  snackbarType = SnackbarType.info;
 
   books: BookRow[] = [
     {
@@ -106,6 +111,7 @@ export default class Books extends Vue {
 
   addBook(info: BookInfo): void {
     console.log(info);
+    this.showSnackbar = true;
   }
 
   applyFilter(): void {

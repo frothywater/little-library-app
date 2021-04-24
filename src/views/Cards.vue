@@ -38,6 +38,8 @@
         </template>
       </v-col>
     </v-row>
+
+    <snackbar v-model="showSnackbar" :text="message" :type="snackbarType" />
   </v-container>
 </template>
 
@@ -47,14 +49,19 @@ import CardTable from "@/components/CardTable.vue";
 import BookTable from "@/components/BookTable.vue";
 import AddCardForm from "@/components/AddCardForm.vue";
 import BorrowForm from "@/components/BorrowForm.vue";
+import Snackbar from "@/components/Snackbar.vue";
 import { BookRow, CardRow, CardType, CardInfo } from "little-library/src/typing";
+import { SnackbarType } from "@/utilities/typing";
 
 @Component({
-  components: { CardTable, BookTable, AddCardForm, BorrowForm },
+  components: { CardTable, BookTable, AddCardForm, BorrowForm, Snackbar },
 })
 export default class Cards extends Vue {
   showAddCardDialog = false;
   showBorrowDialog = false;
+  showSnackbar = false;
+  message = "";
+  snackbarType = SnackbarType.info;
 
   selectedCards: CardRow[] = [];
 
@@ -93,10 +100,12 @@ export default class Cards extends Vue {
 
   addCard(info: CardInfo): void {
     console.log(info);
+    this.showSnackbar = true;
   }
 
   borrow(id: number): void {
     console.log(id);
+    this.showSnackbar = true;
   }
 }
 </script>
