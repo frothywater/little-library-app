@@ -13,6 +13,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "electron-better-ipc": "^1.1.1",
     "little-library": "file:../little-library",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",

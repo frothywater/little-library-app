@@ -1,4 +1,8 @@
+import { IpcChannels } from "@/utilities/ipcChannels";
+import { AdminLoginInfo, ManagerLoginInfo } from "@/utilities/typing";
+import { ipcRenderer as ipc } from "electron-better-ipc";
 import {
+  Action,
   getModule,
   Module,
   Mutation,
@@ -12,20 +16,36 @@ class Auth extends VuexModule {
   managerLoggedIn = false;
 
   @Mutation
-  adminLogin(): void {
-    this.adminLoggedIn = true;
+  private setAdmin(value: boolean): void {
+    this.adminLoggedIn = value;
   }
+
   @Mutation
-  adminLogout(): void {
-    this.adminLoggedIn = false;
+  private setManager(value: boolean): void {
+    this.managerLoggedIn = value;
   }
-  @Mutation
-  managerLogin(): void {
-    this.managerLoggedIn = true;
+
+  @Action
+  async adminLogin(info: AdminLoginInfo): Promise<boolean> {
+    try {
+      await ipc.callMain(IpcChannels.adminLogin, info);
+      this.context.commit("setAdminLogin", true);
+      return true;
+    } catch {
+      return false;
+    }
   }
-  @Mutation
-  managerLogout(): void {
-    this.managerLoggedIn = false;
+
+  @Action
+  async managerLogin(info: ManagerLoginInfo): Promise<boolean> {
+    try {
+      const result = await ipc.callMain(IpcChannels.managerLogin, info);
+      if (!result) return false;
+      this.context.commit("setManageLogin", true);
+      return true;
+    } catch {
+      return false;
+    }
   }
 }
 
