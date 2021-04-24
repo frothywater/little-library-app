@@ -1,29 +1,42 @@
-import { LittleLibraryError } from "@/utilities/error";
-import { IpcChannels } from "@/utilities/ipcChannels";
+import { LittleLibraryError } from "@/shared/error";
+import {
+  adminLoginChannel,
+  adminLogoutChannel,
+  managerLoginChannel,
+  managerLogoutChannel,
+} from "@/shared/ipcChannel";
 import { AdminLoginInfo, ManagerLoginInfo } from "@/utilities/typing";
-import { ipcMain as ipc } from "electron-better-ipc";
 import { Database, Library } from "little-library";
+import { listen } from "./ipc";
 
-let db: Database | undefined;
-let library: Library | undefined;
+let db: Database | null;
+let library: Library | null;
 
-ipc.answerRenderer(IpcChannels.adminLogin, async (info: AdminLoginInfo) => {
-  db = new Database(info.username, info.password, info.database);
+listen(adminLoginChannel, async (info: AdminLoginInfo) => {
   try {
+    db = new Database(info.username, info.password, info.database);
     await db.connect();
   } catch {
-    throw LittleLibraryError.databaseError;
+    throw Error(LittleLibraryError.databaseError);
   }
 });
 
-ipc.answerRenderer(IpcChannels.managerLogin, async (info: ManagerLoginInfo) => {
-  if (!db) throw LittleLibraryError.adminNotLoggedIn;
-  library = new Library(db);
+listen(managerLoginChannel, async (info: ManagerLoginInfo) => {
+  if (!db) throw Error(LittleLibraryError.adminNotLoggedIn);
   try {
-    const result = await library.checkManager(info.username, info.password);
-    if (!result) return undefined;
-    else return result.name;
+    library = new Library(db);
+    return await library.checkManager(info.username, info.password);
   } catch {
-    throw LittleLibraryError.databaseError;
+    throw Error(LittleLibraryError.databaseError);
   }
+});
+
+listen(adminLogoutChannel, async () => {
+  if (library) await library.close();
+  library = null;
+  db = null;
+});
+
+listen(managerLogoutChannel, async () => {
+  library = null;
 });
