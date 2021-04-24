@@ -13,23 +13,32 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { BookRow } from "little-library/src/typing";
 import { DataTableHeader } from "vuetify";
 
+const actionHeader: DataTableHeader[] = [{ text: "", value: "actions", sortable: false, cellClass: "px-1" }];
+
+const basicHeaders: DataTableHeader[] = [
+  { text: "ID", value: "id" },
+  { text: "Title", value: "title" },
+  { text: "Author", value: "author" },
+  { text: "Press", value: "press" },
+];
+
+const extraHeaders: DataTableHeader[] = [
+  { text: "Category", value: "category" },
+  { text: "Year", value: "year" },
+  { text: "Price", value: "price" },
+  { text: "Total", value: "total" },
+  { text: "Stock", value: "stock" },
+];
+
 @Component
 export default class BookTable extends Vue {
   @Prop(Array) readonly books!: BookRow[];
   @Prop({ type: Boolean, default: false }) loading: boolean | undefined;
   @Prop({ type: Boolean, default: false }) withAction: boolean | undefined;
+  @Prop({ type: Boolean, default: false }) mini: boolean | undefined;
 
-  headers: DataTableHeader[] = [
-    { text: "", value: "actions", sortable: false, cellClass: "px-1" },
-    { text: "ID", value: "id" },
-    { text: "Title", value: "title" },
-    { text: "Author", value: "author" },
-    { text: "Press", value: "press" },
-    { text: "Category", value: "category" },
-    { text: "Year", value: "year" },
-    { text: "Price", value: "price" },
-    { text: "Total", value: "total" },
-    { text: "Stock", value: "stock" },
-  ];
+  get headers(): DataTableHeader[] {
+    return [...(this.withAction ? actionHeader : []), ...basicHeaders, ...(this.mini ? [] : extraHeaders)];
+  }
 }
 </script>

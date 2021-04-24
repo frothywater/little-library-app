@@ -23,7 +23,7 @@
         </v-toolbar>
 
         <template v-if="!!selectedCardID">
-          <book-table :books="books" with-action />
+          <book-table :books="books" with-action mini />
 
           <borrow-form v-model="showBorrowDialog" @submit="borrow($event)" />
 
