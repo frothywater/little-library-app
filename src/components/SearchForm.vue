@@ -37,13 +37,13 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import FormDialog from "@/components/FormDialog.vue";
 import { rules, ValidationRules } from "@/utilities/validation";
-import { BookFilterParams } from "@/utilities/typing";
+import { SearchParams } from "@/utilities/typing";
 
 @Component({ components: { FormDialog } })
-export default class FilterForm extends Vue {
+export default class SearchForm extends Vue {
   @Prop(Boolean) value!: boolean;
 
-  readonly initialValue: BookFilterParams = {
+  readonly initialValue: SearchParams = {
     title: undefined,
     author: undefined,
     press: undefined,

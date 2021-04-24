@@ -3,9 +3,9 @@
     <v-toolbar flat>
       <v-toolbar-title>Books</v-toolbar-title>
       <v-spacer />
-      <v-btn text color="secondary" @click="showFilterDialog = !showFilterDialog">
-        <v-icon size="18" class="mr-2">mdi-filter</v-icon>
-        Filter
+      <v-btn text color="secondary" @click="showSearchDialog = !showSearchDialog">
+        <v-icon size="18" class="mr-2">mdi-magnify</v-icon>
+        Search
       </v-btn>
     </v-toolbar>
 
@@ -13,7 +13,7 @@
 
     <add-book-form v-model="showAddBookDialog" @submit="add" />
 
-    <filter-form v-model="showFilterDialog" @submit="applyFilter" />
+    <search-form v-model="showSearchDialog" @submit="search" />
 
     <v-btn color="secondary" dark fab absolute class="fab-button" @click="showAddBookDialog = !showAddBookDialog">
       <v-icon>mdi-plus</v-icon>
@@ -27,17 +27,17 @@
 import { Component, Vue } from "vue-property-decorator";
 import BookTable from "@/components/BookTable.vue";
 import AddBookForm from "@/components/AddBookForm.vue";
-import FilterForm from "@/components/FilterForm.vue";
+import SearchForm from "@/components/SearchForm.vue";
 import Snackbar from "@/components/Snackbar.vue";
 import { BookRow, BookInfo } from "little-library/src/typing";
-import { BookFilterParams, SnackbarType } from "@/utilities/typing";
+import { SearchParams, SnackbarType } from "@/utilities/typing";
 
 @Component({
-  components: { BookTable, AddBookForm, FilterForm, Snackbar },
+  components: { BookTable, AddBookForm, SearchForm, Snackbar },
 })
 export default class Books extends Vue {
   showAddBookDialog = false;
-  showFilterDialog = false;
+  showSearchDialog = false;
   loading = false;
   showSnackbar = false;
   message = "";
@@ -62,7 +62,7 @@ export default class Books extends Vue {
     this.showSnackbar = true;
   }
 
-  applyFilter(params: BookFilterParams): void {
+  search(params: SearchParams): void {
     console.log(params);
   }
 }

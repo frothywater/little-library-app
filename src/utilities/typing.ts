@@ -4,7 +4,7 @@ export enum SnackbarType {
   success = "success",
 }
 
-export interface BookFilterParams {
+export interface SearchParams {
   title?: string;
   author?: string;
   press?: string;
