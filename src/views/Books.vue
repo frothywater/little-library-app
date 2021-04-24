@@ -11,54 +11,9 @@
 
     <book-table :books="books" :loading="loading" />
 
-    <add-book-form v-model="showAddBookDialog" @submit="addBook" />
+    <add-book-form v-model="showAddBookDialog" @submit="add" />
 
-    <v-dialog v-model="showFilterDialog" max-width="500">
-      <v-card>
-        <v-card-title>Search</v-card-title>
-
-        <v-card-text>
-          <v-form @submit.prevent="addBook" ref="filterForm">
-            <v-row>
-              <v-col cols="12" class="pb-0">
-                <v-text-field v-model="draftFilterParams.title" label="Title" maxlength="255" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="4" class="py-0">
-                <v-text-field v-model="draftFilterParams.author" label="Author" maxlength="255" />
-              </v-col>
-              <v-col cols="4" class="py-0">
-                <v-text-field v-model="draftFilterParams.press" label="Press" maxlength="255" />
-              </v-col>
-              <v-col cols="4" class="py-0">
-                <v-text-field v-model="draftFilterParams.category" label="Category" maxlength="255" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="3" class="py-0">
-                <v-text-field v-model="draftFilterParams.minYear" label="Min Year" type="number" min="0" :rules="[rules.nonNegative]" />
-              </v-col>
-              <v-col cols="3" class="py-0">
-                <v-text-field v-model="draftFilterParams.maxYear" label="Max Year" type="number" min="0" :rules="[rules.nonNegative]" />
-              </v-col>
-              <v-col cols="3" class="py-0">
-                <v-text-field v-model="draftFilterParams.minPrice" label="Min Price" type="number" min="0" step="0.1" :rules="[rules.nonNegative]" />
-              </v-col>
-              <v-col cols="3" class="py-0">
-                <v-text-field v-model="draftFilterParams.maxPrice" label="Max Price" type="number" min="0" step="0.1" :rules="[rules.nonNegative]" />
-              </v-col>
-            </v-row>
-          </v-form>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text @click="cancelFilter">Cancel</v-btn>
-          <v-btn color="primary" text type="submit" @click="applyFilter">Apply</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <filter-form v-model="showFilterDialog" @submit="applyFilter" />
 
     <v-btn color="secondary" dark fab absolute class="fab-button" @click="showAddBookDialog = !showAddBookDialog">
       <v-icon>mdi-plus</v-icon>
@@ -72,13 +27,13 @@
 import { Component, Vue } from "vue-property-decorator";
 import BookTable from "@/components/BookTable.vue";
 import AddBookForm from "@/components/AddBookForm.vue";
+import FilterForm from "@/components/FilterForm.vue";
 import Snackbar from "@/components/Snackbar.vue";
 import { BookRow, BookInfo } from "little-library/src/typing";
-import { InputValidationRule } from "vuetify";
-import { SnackbarType } from "@/utilities/typing";
+import { BookFilterParams, SnackbarType } from "@/utilities/typing";
 
 @Component({
-  components: { BookTable, AddBookForm, Snackbar },
+  components: { BookTable, AddBookForm, FilterForm, Snackbar },
 })
 export default class Books extends Vue {
   showAddBookDialog = false;
@@ -102,41 +57,13 @@ export default class Books extends Vue {
     },
   ];
 
-  draftFilterParams: BookFilterParams = {};
-
-  rules: { [key: string]: InputValidationRule } = {
-    required: (value) => !!value || "Required.",
-    nonNegative: (value) => !value || value >= 0 || "Should be no less than 0.",
-  };
-
-  addBook(info: BookInfo): void {
+  add(info: BookInfo): void {
     console.log(info);
     this.showSnackbar = true;
   }
 
-  applyFilter(): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((this.$refs.filterForm as any).validate()) {
-      this.showFilterDialog = false;
-    }
+  applyFilter(params: BookFilterParams): void {
+    console.log(params);
   }
-
-  cancelFilter(): void {
-    this.draftFilterParams = {};
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.$refs.filterForm as any).resetValidation();
-    this.showFilterDialog = false;
-  }
-}
-
-interface BookFilterParams {
-  title?: string;
-  author?: string;
-  press?: string;
-  category?: string;
-  minYear?: number;
-  maxYear?: number;
-  minPrice?: number;
-  maxPrice?: number;
 }
 </script>
