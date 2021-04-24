@@ -8,30 +8,45 @@
         <log-card :status="managerLoggedIn" name="Librarian" @logout="managerLogout" />
       </v-col>
     </v-row>
+
+    <snackbar v-model="showSnackbar" :text="message" type="error" />
   </v-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import LogCard from "@/components/LogCard.vue";
+import Snackbar from "@/components/Snackbar.vue";
 import auth from "@/store/auth";
 
-@Component({ components: { LogCard } })
+@Component({ components: { LogCard, Snackbar } })
 export default class Settings extends Vue {
+  showSnackbar = false;
+  message = "";
+
   get adminLoggedIn(): boolean {
-    return auth.adminLoggedIn;
+    return auth.adminAuthenticated;
   }
   get managerLoggedIn(): boolean {
-    return auth.managerLoggedIn;
+    return auth.managerAuthenticated;
   }
 
-  adminLogout(): void {
-    auth.adminLogout();
-    auth.managerLogout();
+  async adminLogout(): Promise<void> {
+    try {
+      auth.adminLogout();
+    } catch (err) {
+      this.message = err;
+      this.showSnackbar = true;
+    }
   }
 
-  managerLogout(): void {
-    auth.managerLogout();
+  async managerLogout(): Promise<void> {
+    try {
+      auth.managerLogout();
+    } catch (err) {
+      this.message = err;
+      this.showSnackbar = true;
+    }
   }
 }
 </script>

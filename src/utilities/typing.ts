@@ -25,3 +25,13 @@ export interface ManagerLoginInfo {
   username: string;
   password: string;
 }
+
+export interface AdminInfo {
+  username: string;
+  database: string;
+}
+
+export interface ManagerInfo {
+  username?: string;
+  phone?: string;
+}

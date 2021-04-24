@@ -43,15 +43,15 @@ const router = new VueRouter({
 
 router.beforeEach((to, _from, next) => {
   if (to.path === "/adminLogin") {
-    if (!auth.managerLoggedIn) next();
+    if (!auth.managerAuthenticated) next();
     else next("/managerLogin");
   } else if (to.path === "/managerLogin") {
-    if (!auth.adminLoggedIn) next("/adminLogin");
-    else if (!auth.managerLoggedIn) next();
+    if (!auth.adminAuthenticated) next("/adminLogin");
+    else if (!auth.managerAuthenticated) next();
     else next("/");
   } else {
-    if (auth.adminLoggedIn) {
-      if (auth.managerLoggedIn) next();
+    if (auth.adminAuthenticated) {
+      if (auth.managerAuthenticated) next();
       else next("/managerLogin");
     } else next("/adminLogin");
   }

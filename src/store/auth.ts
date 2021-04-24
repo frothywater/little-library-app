@@ -1,6 +1,16 @@
-import { IpcChannels } from "@/utilities/ipcChannels";
-import { AdminLoginInfo, ManagerLoginInfo } from "@/utilities/typing";
-import { ipcRenderer as ipc } from "electron-better-ipc";
+import {
+  adminLoginChannel,
+  adminLogoutChannel,
+  managerLoginChannel,
+  managerLogoutChannel,
+} from "@/shared/ipcChannel";
+import { ask } from "@/utilities/ipc";
+import {
+  AdminInfo,
+  AdminLoginInfo,
+  ManagerInfo,
+  ManagerLoginInfo,
+} from "@/utilities/typing";
 import {
   Action,
   getModule,
@@ -10,42 +20,60 @@ import {
 } from "vuex-module-decorators";
 import store from "./";
 
-@Module({ name: "auth", store, dynamic: true })
+@Module({ dynamic: true, store, name: "auth" })
 class Auth extends VuexModule {
-  adminLoggedIn = false;
-  managerLoggedIn = false;
+  admin: AdminInfo | null = null;
+  manager: ManagerInfo | null = null;
 
   @Mutation
-  private setAdmin(value: boolean): void {
-    this.adminLoggedIn = value;
+  setAdmin(info: AdminInfo | null): void {
+    this.admin = info;
   }
 
   @Mutation
-  private setManager(value: boolean): void {
-    this.managerLoggedIn = value;
+  setManager(info: ManagerInfo | null): void {
+    this.manager = info;
+  }
+
+  get adminAuthenticated() {
+    return !!this.admin;
+  }
+
+  get managerAuthenticated() {
+    return !!this.manager;
   }
 
   @Action
-  async adminLogin(info: AdminLoginInfo): Promise<boolean> {
-    try {
-      await ipc.callMain(IpcChannels.adminLogin, info);
-      this.context.commit("setAdminLogin", true);
-      return true;
-    } catch {
-      return false;
-    }
+  async adminLogin(info: AdminLoginInfo): Promise<void> {
+    await ask(adminLoginChannel, info);
+    this.setAdmin({
+      username: info.username,
+      database: info.database,
+    });
   }
 
   @Action
   async managerLogin(info: ManagerLoginInfo): Promise<boolean> {
-    try {
-      const result = await ipc.callMain(IpcChannels.managerLogin, info);
-      if (!result) return false;
-      this.context.commit("setManageLogin", true);
-      return true;
-    } catch {
-      return false;
-    }
+    const result = await ask(managerLoginChannel, info);
+    if (!result) return false;
+    this.setManager({
+      username: result.name,
+      phone: result.phone,
+    });
+    return true;
+  }
+
+  @Action
+  async adminLogout(): Promise<void> {
+    await ask(adminLogoutChannel, null);
+    this.setAdmin(null);
+    this.setManager(null);
+  }
+
+  @Action
+  async managerLogout(): Promise<void> {
+    await ask(managerLogoutChannel, null);
+    this.setManager(null);
   }
 }
 
