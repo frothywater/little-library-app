@@ -12,7 +12,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="cancel">Cancel</v-btn>
-        <v-btn color="primary" text type="submit" @click="submit">Save</v-btn>
+        <v-btn color="primary" text type="submit" @click="submit">Submit</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
