@@ -24,6 +24,16 @@ const routes: Array<RouteConfig> = [
     name: "Settings",
     component: () => import("../views/Settings.vue"),
   },
+  {
+    path: "/adminLogin",
+    name: "Admin Login",
+    component: () => import("../views/AdminLogin.vue"),
+  },
+  {
+    path: "/managerLogin",
+    name: "Manager Login",
+    component: () => import("../views/ManagerLogin.vue"),
+  },
 ];
 
 const router = new VueRouter({

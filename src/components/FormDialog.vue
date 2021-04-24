@@ -1,6 +1,6 @@
 <template>
-  <v-dialog :value="value" @input="handleInput" :max-width="width">
-    <v-card>
+  <v-dialog :persistent="persistent" :value="value" @input="handleInput" :max-width="width">
+    <v-card :loading="loading">
       <v-card-title>{{ title }}</v-card-title>
 
       <v-card-text>
@@ -11,7 +11,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="cancel">Cancel</v-btn>
+        <v-btn text @click="cancel" v-if="!persistent">Cancel</v-btn>
         <v-btn color="primary" text type="submit" @click="submit">Submit</v-btn>
       </v-card-actions>
     </v-card>
@@ -28,6 +28,8 @@ export default class FormDialog<T> extends Vue {
   @Prop(Boolean) value!: boolean;
   @Prop({ type: String, default: "" }) title: string | undefined;
   @Prop({ type: Number, default: 500 }) width: number | undefined;
+  @Prop({ type: Boolean, default: false }) persistent: boolean | undefined;
+  @Prop({ type: Boolean, default: false }) loading: boolean | undefined;
   @Prop() initial!: T;
 
   draft: T | null = null;
@@ -39,8 +41,10 @@ export default class FormDialog<T> extends Vue {
   submit(): void {
     if ((this.$refs.form as any).validate()) {
       this.$emit("submit", typeof this.initial === "object" ? Object.assign({}, this.draft) : this.draft);
-      this.reset();
-      this.$emit("input", false);
+      if (!this.persistent) {
+        this.reset();
+        this.$emit("input", false);
+      }
     }
   }
 
