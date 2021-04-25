@@ -34,7 +34,7 @@ import AddBookForm from "@/components/AddBookForm.vue";
 import SearchForm from "@/components/SearchForm.vue";
 import Snackbar from "@/components/Snackbar.vue";
 import ask from "@/utilities/ipc";
-import { searchBookChannel } from "@/shared/channels";
+import { addBookChannel, searchBookChannel } from "@/shared/channels";
 import { BookRow, BookInfo, BookSearchParams } from "little-library/src/typing";
 import { BookSearchArg, SearchParams, SnackbarType } from "@/utilities/typing";
 import { DataOptions } from "vuetify";
@@ -99,9 +99,19 @@ export default class Books extends Vue {
     return { params: bookSearchParams, sortingKey: this.sortBy as keyof BookRow, ascending: !this.sortDesc };
   }
 
-  add(info: BookInfo): void {
+  async add(info: BookInfo): Promise<void> {
     console.log(info);
-    this.showSnackbar = true;
+    try {
+      await ask(addBookChannel, [info]);
+      this.message = "Success!";
+      this.snackbarType = SnackbarType.success;
+      this.showSnackbar = true;
+      this.search();
+    } catch (err) {
+      this.message = err;
+      this.snackbarType = SnackbarType.error;
+      this.showSnackbar = true;
+    }
   }
 
   async search(): Promise<void> {
