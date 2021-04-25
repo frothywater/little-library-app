@@ -102,14 +102,10 @@ export default class Books extends Vue {
   async add(info: BookInfo): Promise<void> {
     try {
       await ask(addBookChannel, [info]);
-      this.message = "Success!";
-      this.snackbarType = SnackbarType.success;
-      this.showSnackbar = true;
+      this.prompt("Success!", SnackbarType.success);
       this.search();
     } catch (err) {
-      this.message = err;
-      this.snackbarType = SnackbarType.error;
-      this.showSnackbar = true;
+      this.prompt(err, SnackbarType.error);
     }
   }
 
@@ -118,12 +114,16 @@ export default class Books extends Vue {
     try {
       this.books = await ask(searchBookChannel, this.searchArg);
     } catch (err) {
-      this.message = err;
-      this.snackbarType = SnackbarType.error;
-      this.showSnackbar = true;
+      this.prompt(err, SnackbarType.error);
     } finally {
       this.loading = false;
     }
+  }
+
+  prompt(message?: string, type?: SnackbarType): void {
+    this.message = message ?? "";
+    this.snackbarType = type ?? SnackbarType.info;
+    this.showSnackbar = true;
   }
 }
 </script>
