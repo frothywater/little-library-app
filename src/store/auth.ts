@@ -5,7 +5,7 @@ import {
   managerLogoutChannel,
 } from "@/shared/channels";
 import store from "@/store";
-import { ask } from "@/utilities/ipc";
+import ask from "@/utilities/ipc";
 import {
   AdminInfo,
   AdminLoginInfo,

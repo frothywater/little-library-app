@@ -2,7 +2,7 @@ import { IpcResult } from "@/shared/ipcResult";
 import { ipcRenderer } from "electron";
 import { IpcChannel } from "../shared/ipcChannel";
 
-export function ask<TArg, TResult>(
+export default function ask<TArg, TResult>(
   channel: IpcChannel<TArg, TResult>,
   arg: TArg
 ): Promise<TResult> {
