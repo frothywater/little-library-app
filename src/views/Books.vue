@@ -100,7 +100,6 @@ export default class Books extends Vue {
   }
 
   async add(info: BookInfo): Promise<void> {
-    console.log(info);
     try {
       await ask(addBookChannel, [info]);
       this.message = "Success!";
