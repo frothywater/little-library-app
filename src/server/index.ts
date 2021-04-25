@@ -3,9 +3,14 @@ import {
   adminLogoutChannel,
   managerLoginChannel,
   managerLogoutChannel,
+  searchBookChannel,
 } from "@/shared/channels";
 import { LittleLibraryError } from "@/shared/error";
-import { AdminLoginInfo, ManagerLoginInfo } from "@/utilities/typing";
+import {
+  AdminLoginInfo,
+  BookSearchArg,
+  ManagerLoginInfo,
+} from "@/utilities/typing";
 import { Database, Library } from "little-library";
 import { answer } from "./ipc";
 
@@ -41,5 +46,18 @@ export default function listen(): void {
 
   answer(managerLogoutChannel, async () => {
     library = null;
+  });
+
+  answer(searchBookChannel, async (arg: BookSearchArg) => {
+    if (!library) throw Error(LittleLibraryError.managerNotLoggedIn);
+    try {
+      return await library.searchBook(
+        arg.params,
+        arg.sortingKey,
+        arg.ascending
+      );
+    } catch {
+      throw Error(LittleLibraryError.databaseError);
+    }
   });
 }

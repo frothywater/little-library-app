@@ -40,7 +40,7 @@ export default class FormDialog<T> extends Vue {
 
   submit(): void {
     if ((this.$refs.form as any).validate()) {
-      this.$emit("submit", typeof this.initial === "object" ? Object.assign({}, this.draft) : this.draft);
+      this.$emit("submit", typeof this.initial === "object" ? Object.assign({}, this.draft) : this.draft); // Get a copy without reactivity
       if (!this.persistent) {
         this.reset();
         this.$emit("input", false);

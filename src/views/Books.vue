@@ -3,17 +3,21 @@
     <v-toolbar flat>
       <v-toolbar-title>Books</v-toolbar-title>
       <v-spacer />
+      <v-btn text @click="resetParams">
+        <v-icon size="18" class="mr-2">mdi-refresh</v-icon>
+        Reset
+      </v-btn>
       <v-btn text color="secondary" @click="showSearchDialog = !showSearchDialog">
         <v-icon size="18" class="mr-2">mdi-magnify</v-icon>
         Search
       </v-btn>
     </v-toolbar>
 
-    <book-table :books="books" :loading="loading" />
+    <book-table :books="books" :loading="loading" @update="handleUpdate" />
 
     <add-book-form v-model="showAddBookDialog" @submit="add" />
 
-    <search-form v-model="showSearchDialog" @submit="search" />
+    <search-form v-model="showSearchDialog" @submit="updateParams" />
 
     <v-btn color="secondary" dark fab absolute class="fab-button" @click="showAddBookDialog = !showAddBookDialog">
       <v-icon>mdi-plus</v-icon>
@@ -29,8 +33,11 @@ import BookTable from "@/components/BookTable.vue";
 import AddBookForm from "@/components/AddBookForm.vue";
 import SearchForm from "@/components/SearchForm.vue";
 import Snackbar from "@/components/Snackbar.vue";
-import { BookRow, BookInfo } from "little-library/src/typing";
-import { SearchParams, SnackbarType } from "@/utilities/typing";
+import ask from "@/utilities/ipc";
+import { searchBookChannel } from "@/shared/channels";
+import { BookRow, BookInfo, BookSearchParams } from "little-library/src/typing";
+import { BookSearchArg, SearchParams, SnackbarType } from "@/utilities/typing";
+import { DataOptions } from "vuetify";
 
 @Component({
   components: { BookTable, AddBookForm, SearchForm, Snackbar },
@@ -43,27 +50,71 @@ export default class Books extends Vue {
   message = "";
   snackbarType = SnackbarType.info;
 
-  books: BookRow[] = [
-    {
-      id: 1,
-      title: "Hello",
-      author: "Alice",
-      press: "Penguin",
-      category: "Fiction",
-      year: 2016,
-      price: 10.0,
-      total: 10,
-      stock: 5,
-    },
-  ];
+  books: BookRow[] = [];
+  readonly initialParams: SearchParams = {
+    title: undefined,
+    author: undefined,
+    press: undefined,
+    category: undefined,
+    minYear: undefined,
+    maxYear: undefined,
+    minPrice: undefined,
+    maxPrice: undefined,
+  };
+  params: SearchParams | null = null;
+  sortBy: string | undefined;
+  sortDesc = false;
+
+  created(): void {
+    this.resetParams();
+  }
+
+  updateParams(params: SearchParams): void {
+    this.params = Object.assign({}, this.initialParams, params);
+    this.search();
+  }
+
+  resetParams(): void {
+    this.params = Object.assign({}, this.initialParams);
+    this.search();
+  }
+
+  handleUpdate(options: DataOptions): void {
+    this.sortBy = options.sortBy[0];
+    this.sortDesc = options.sortDesc[0];
+    this.search();
+  }
+
+  get searchArg(): BookSearchArg {
+    if (!this.params) return { params: {} };
+    const { title, author, press, category, minYear, maxYear, minPrice, maxPrice } = this.params;
+    const bookSearchParams: BookSearchParams = {
+      title,
+      author,
+      press,
+      category,
+      year: [minYear ? parseInt(minYear) : undefined, maxYear ? parseInt(maxYear) : undefined],
+      price: [minPrice ? parseFloat(minPrice) : undefined, maxPrice ? parseFloat(maxPrice) : undefined],
+    };
+    return { params: bookSearchParams, sortingKey: this.sortBy as keyof BookRow, ascending: !this.sortDesc };
+  }
 
   add(info: BookInfo): void {
     console.log(info);
     this.showSnackbar = true;
   }
 
-  search(params: SearchParams): void {
-    console.log(params);
+  async search(): Promise<void> {
+    this.loading = true;
+    try {
+      this.books = await ask(searchBookChannel, this.searchArg);
+    } catch (err) {
+      this.message = err;
+      this.snackbarType = SnackbarType.error;
+      this.showSnackbar = true;
+    } finally {
+      this.loading = false;
+    }
   }
 }
 </script>

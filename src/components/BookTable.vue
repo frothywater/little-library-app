@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="books" item-key="id" :loading="loading" loading-text="Loading data..." disable-pagination disable-sort hide-default-footer>
+  <v-data-table :headers="headers" :items="books" item-key="id" :loading="loading" loading-text="Loading data..." :server-items-length="50" @update:options="$emit('update', $event)" disable-pagination hide-default-footer>
     <template v-if="withAction" #item.actions>
       <v-btn icon>
         <v-icon>mdi-book-arrow-right</v-icon>
