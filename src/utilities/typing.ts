@@ -51,6 +51,7 @@ export interface AdminInfo {
 }
 
 export interface ManagerInfo {
+  id: number;
   username?: string;
   phone?: string;
 }

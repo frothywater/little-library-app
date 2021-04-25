@@ -68,6 +68,7 @@ class Auth extends VuexModule implements AuthState {
     const result = await ask(managerLoginChannel, info);
     if (!result) return false;
     this.setManager({
+      id: result.id,
       username: result.name,
       phone: result.phone,
     });
