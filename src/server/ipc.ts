@@ -1,9 +1,10 @@
-import { LittleLibraryError } from "@/shared/error";
 import { IpcChannel } from "@/shared/ipcChannel";
 import { IpcResult } from "@/shared/ipcResult";
 import { ipcMain } from "electron";
 
-export function listen<TArg, TResult>(
+// Handle error before reply, passing an object containing extra information for error handling in renderer process
+
+export function answer<TArg, TResult>(
   channel: IpcChannel<TArg, TResult>,
   handle: (arg: TArg) => Promise<TResult>
 ): void {
@@ -11,15 +12,13 @@ export function listen<TArg, TResult>(
     handle(arg)
       .then((result) =>
         event.reply(channel.answerChannel, {
-          success: true,
           value: result,
-        } as IpcResult<TResult, LittleLibraryError>)
+        } as IpcResult<TResult>)
       )
       .catch((error) =>
-        event.reply({
-          success: false,
+        event.reply(channel.answerChannel, {
           error: error,
-        } as IpcResult<TResult, LittleLibraryError>)
+        } as IpcResult<TResult>)
       );
   });
 }

@@ -1,5 +1,8 @@
-export interface IpcResult<T, TError> {
-  success: boolean;
-  value: T;
+import { LittleLibraryError } from "./error";
+
+export type IpcResult<T> = Result<T, LittleLibraryError>;
+
+interface Result<T, TError> {
+  value?: T;
   error?: TError;
 }

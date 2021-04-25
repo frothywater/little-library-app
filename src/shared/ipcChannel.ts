@@ -1,6 +1,3 @@
-import { AdminLoginInfo, ManagerLoginInfo } from "@/utilities/typing";
-import { ManagerRow } from "little-library";
-
 export interface IpcChannel<TArg, TResult> {
   channelName: string;
   askChannel: string;
@@ -9,36 +6,31 @@ export interface IpcChannel<TArg, TResult> {
   result: TResult;
 }
 
-abstract class IpcChannelClass<TArg, TResult>
+abstract class IpcChannelBase<TArg, TResult>
   implements IpcChannel<TArg, TResult> {
   abstract channelName: string;
+
+  // False properties only to "store" type information, not actually store data
   arg!: TArg;
   result!: TResult;
+
   get askChannel(): string {
     return `${this.channelName}-ask`;
   }
+
   get answerChannel(): string {
     return `${this.channelName}-answer`;
   }
 }
 
-class AdminLoginChannel extends IpcChannelClass<AdminLoginInfo, void> {
-  channelName = "admin-login";
-}
-class AdminLogoutChannel extends IpcChannelClass<never, void> {
-  channelName = "admin-logout";
-}
-class ManagerLoginChannel extends IpcChannelClass<
-  ManagerLoginInfo,
-  ManagerRow | null
-> {
-  channelName = "manager-login";
-}
-class ManagerLogoutChannel extends IpcChannelClass<never, void> {
-  channelName = "manager-logout";
-}
+export function createIpcChannel<TArg, TResult>(
+  channelName: string
+): IpcChannel<TArg, TResult> {
+  // Create local class extends the generic base inside the function
+  // Instead of using decorator or mixin, both of which cannot provide extra type information
+  class IpcChannelClass extends IpcChannelBase<TArg, TResult> {
+    channelName = channelName;
+  }
 
-export const adminLoginChannel = new AdminLoginChannel();
-export const adminLogoutChannel = new AdminLogoutChannel();
-export const managerLoginChannel = new ManagerLoginChannel();
-export const managerLogoutChannel = new ManagerLogoutChannel();
+  return new IpcChannelClass();
+}
