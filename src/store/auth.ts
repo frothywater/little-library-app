@@ -3,7 +3,8 @@ import {
   adminLogoutChannel,
   managerLoginChannel,
   managerLogoutChannel,
-} from "@/shared/ipcChannel";
+} from "@/shared/channels";
+import store from "@/store";
 import { ask } from "@/utilities/ipc";
 import {
   AdminInfo,
@@ -13,15 +14,25 @@ import {
 } from "@/utilities/typing";
 import {
   Action,
+  config,
   getModule,
   Module,
   Mutation,
   VuexModule,
 } from "vuex-module-decorators";
-import store from "./";
 
+export interface AuthState {
+  admin: AdminInfo | null;
+  manager: ManagerInfo | null;
+  adminAuthenticated: boolean;
+  managerAuthenticated: boolean;
+}
+
+config.rawError = true; // Important! Otherwise 'vuex-module-decorators' will intercept errors thrown in @Action methods
+
+// Dynamically register module for strong-typed store access
 @Module({ dynamic: true, store, name: "auth" })
-class Auth extends VuexModule {
+class Auth extends VuexModule implements AuthState {
   admin: AdminInfo | null = null;
   manager: ManagerInfo | null = null;
 

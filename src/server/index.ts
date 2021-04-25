@@ -1,10 +1,10 @@
-import { LittleLibraryError } from "@/shared/error";
 import {
   adminLoginChannel,
   adminLogoutChannel,
   managerLoginChannel,
   managerLogoutChannel,
-} from "@/shared/ipcChannel";
+} from "@/shared/channels";
+import { LittleLibraryError } from "@/shared/error";
 import { AdminLoginInfo, ManagerLoginInfo } from "@/utilities/typing";
 import { Database, Library } from "little-library";
 import { answer } from "./ipc";

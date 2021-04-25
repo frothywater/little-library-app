@@ -1,6 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { AuthState } from "./auth";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({});
+export interface RootState {
+  auth: AuthState;
+}
+
+export default new Vuex.Store<RootState>({});
