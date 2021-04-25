@@ -1,5 +1,5 @@
 <template>
-  <form-dialog title="Add Card" :initial="initialValue" #default="{ draft, update }" :value="value" @input="$emit('input', $event)" @submit="$emit('submit', $event)">
+  <form-dialog title="Add Book" :initial="initialValue" #default="{ draft, update }" :value="value" @input="$emit('input', $event)" @submit="$emit('submit', $event)">
     <v-row>
       <v-col cols="12" class="pb-0">
         <v-text-field :value="draft.title" @input="update($event, 'title')" label="Title" :rules="[rules.required]" maxlength="255" />
