@@ -8,8 +8,10 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,
-      appId: "com.frothywater.littlelibrary",
-      productName: "Little Library",
+      builderOptions: {
+        appId: "com.frothywater.littlelibrary",
+        productName: "Little Library",
+      },
       chainWebpackMainProcess: (config) => {
         config.devtool("eval"); // Important! Webpack minimizer will crash 'mysqljs'
       },
