@@ -7,7 +7,7 @@ export default function ask<TArg, TResult>(
   arg: TArg
 ): Promise<TResult> {
   return new Promise<TResult>((resolve, reject) => {
-    ipcRenderer.on(channel.answerChannel, (_, result: IpcResult<TResult>) => {
+    ipcRenderer.once(channel.answerChannel, (_, result: IpcResult<TResult>) => {
       if (result.error) reject(result.error);
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       else resolve(result.value!);
