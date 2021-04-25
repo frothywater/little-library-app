@@ -15,7 +15,11 @@
       },
       "preLaunchTask": "electron-debug",
       "args": ["--remote-debugging-port=9223", "./dist_electron"],
-      "outFiles": ["${workspaceFolder}/dist_electron/**/*.js"]
+      "outFiles": ["${workspaceFolder}/dist_electron/**/*.js"],
+      "skipFiles": [
+        "<node_internals>/**/*.js",
+        "${workspaceFolder}/node_modules/**/*.js"
+      ]
     },
     {
       "name": "Electron: Renderer",
@@ -27,7 +31,11 @@
       "webRoot": "${workspaceFolder}/src",
       "sourceMapPathOverrides": {
         "webpack:///./src/*": "${webRoot}/*"
-      }
+      },
+      "skipFiles": [
+        "<node_internals>/**/*.js",
+        "${webRoot}/js/webpack:/node_modules/**/*.js"
+      ]
     }
   ],
   "compounds": [
