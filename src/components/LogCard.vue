@@ -2,8 +2,11 @@
   <v-card width="300">
     <v-card-title>{{ name }}</v-card-title>
     <v-card-text>
-      <v-icon :color="status ? 'success' : 'error'" class="mr-2">mdi-{{ status ? "check-circle" : "close-circle" }}</v-icon>
-      {{ status ? "Logged in" : "Not logged in" }}
+      <div>
+        <v-icon :color="status ? 'success' : 'error'" class="mr-2">mdi-{{ status ? "check-circle" : "close-circle" }}</v-icon>
+        {{ status ? "Logged in" : "Not logged in" }}
+      </div>
+      <slot />
     </v-card-text>
     <template v-if="status">
       <v-divider />
