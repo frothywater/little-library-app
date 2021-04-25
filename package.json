@@ -1,7 +1,17 @@
 {
   "name": "little-library-app",
+  "description": "A little library management system based on MySQL",
   "version": "0.1.0",
-  "private": true,
+  "author": "frothywater",
+  "keywords": [
+    "vue",
+    "electron"
+  ],
+  "homepage": "https://github.com/frothywater/little-library-app",
+  "repository": "frothywater/little-library-app",
+  "build": {
+    "appId": "com.frothywater.littlelibrary"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
