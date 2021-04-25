@@ -1,3 +1,5 @@
+import { BookRow, BookSearchParams } from "little-library";
+
 export enum SnackbarType {
   info = "info",
   error = "error",
@@ -9,10 +11,27 @@ export interface SearchParams {
   author?: string;
   press?: string;
   category?: string;
-  minYear?: number;
-  maxYear?: number;
-  minPrice?: number;
-  maxPrice?: number;
+  minYear?: string;
+  maxYear?: string;
+  minPrice?: string;
+  maxPrice?: string;
+}
+
+export interface BookSearchArg {
+  params: BookSearchParams;
+  sortingKey?: keyof BookRow;
+  ascending?: boolean;
+}
+
+export interface BorrowArg {
+  cardID: number;
+  bookID: number;
+  managerID: number;
+}
+
+export interface ReturnArg {
+  cardID: number;
+  bookID: number;
 }
 
 export interface AdminLoginInfo {
