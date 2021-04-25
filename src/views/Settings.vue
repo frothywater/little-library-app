@@ -1,4 +1,5 @@
 <template>
+  <!-- Nice way to center element both horizontally and vertically -->
   <v-container fluid class="d-flex flex-column justify-center align-center" style="height: 95vh">
     <v-row class="flex-grow-0">
       <v-col cols="6">
