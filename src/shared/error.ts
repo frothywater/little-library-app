@@ -1,5 +1,6 @@
 export enum LittleLibraryError {
-  adminNotLoggedIn = "Admin is not logged in.",
-  managerNotLoggedIn = "Manager is not logged in.",
-  databaseError = "Database error.",
+  adminNotLoggedIn = "Admin needs to be logged in first.",
+  managerNotLoggedIn = "Manager needs to be logged in first.",
+  databaseError = "Something wrong with database. Please contact admin.",
+  loginError = "Something wrong with connection. Please check connection or your input.",
 }
