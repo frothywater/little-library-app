@@ -32,7 +32,7 @@ export default class FormDialog<T> extends Vue {
   @Prop({ type: Boolean, default: false }) loading: boolean | undefined;
   @Prop() initial!: T;
 
-  draft: T | null = null;
+  draft: T | null = null; // Important! Vue needs it to be instantiated null to plug in reactivity.
 
   created(): void {
     this.reset();
@@ -59,7 +59,7 @@ export default class FormDialog<T> extends Vue {
   }
 
   reset(): void {
-    if (typeof this.initial === "object") this.draft = Object.assign({}, this.draft, this.initial);
+    if (typeof this.initial === "object") this.draft = Object.assign({}, this.initial);
     else this.draft = this.initial;
     if (this.$refs.form) (this.$refs.form as any).resetValidation();
   }
